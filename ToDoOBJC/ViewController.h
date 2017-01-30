@@ -10,8 +10,8 @@
 #import "ToDo.h"
 
 @interface ViewController : UIViewController
-  @property(nonatomic, strong)  NSMutableArray * toDoes;
   @property (weak, nonatomic) IBOutlet UITableView *tableView;
+  @property (nonatomic, strong) NSMutableArray *toDoes;
   -(void)tappedCheck;
 @end
 

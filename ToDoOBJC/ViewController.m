@@ -12,16 +12,41 @@
 #import "Cell.h"
 
 @interface ViewController ()
-//  @property (nonatomic) int index;
+//{
+//  NSMutableArray *toDoes;
+//}
 @end
 
 @implementation ViewController
+-(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+  [self reloadToDoItems];
+  NSLog(@"%d", self.toDoes.count);
+}
+- (void)reloadToDoItems {
+  self.toDoes = [self loadData];
+  [self.tableView reloadData];
+}
 
+-(NSMutableArray*)loadData{
+  NSData *todoData = [[NSUserDefaults standardUserDefaults] objectForKey:@"todo"];
+  NSMutableArray *toDoes = [[NSKeyedUnarchiver unarchiveObjectWithData:todoData] mutableCopy];
+  return toDoes;
+}
+
+-(void)saveDataWithArray:(NSArray*) array{
+  NSData *data = [NSKeyedArchiver archivedDataWithRootObject: array];
+  [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"todo"];
+}
 - (void)viewDidLoad {
   [super viewDidLoad];
-  ToDo *todo = [[ToDo alloc] initWithName:@"Task"];
-  ToDo *todo2 = [[ToDo alloc] initWithName:@"ATask2"];
-  self.toDoes = @[todo, todo2];
+//  ToDo *todo = [[ToDo alloc] initWithName:@"Task"];
+//  ToDo *todo2 = [[ToDo alloc] initWithName:@"ATask2"];
+  NSData *todoData = [[NSUserDefaults standardUserDefaults] objectForKey:@"todo"];
+  self.toDoes = [[NSKeyedUnarchiver unarchiveObjectWithData:todoData] mutableCopy];
+//  self.toDoes = [@[todo, todo2] mutableCopy];
+//  [toDoes initWithObjects:todo,todo2, nil];
+//  [self.toDoes addObject:todo];
+//  [self.toDoes addObject:todo2];
 }
 
   - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -57,8 +82,10 @@
     int tag = tap.view.tag;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag inSection:0];
     [self.toDoes[indexPath.row] changeStatus];
+    [self saveDataWithArray:self.toDoes];
 //    [self.tableView reloadRowsAtIndexPaths:indexPath withRowAnimation:NO];
     [self.tableView reloadData];
+    
   }
   -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath     *)indexPath
   {
@@ -82,9 +109,15 @@
 //  ToDo *toDo = [toDoes objectAtIndex:indexPath.row];
 //  [self.managedObjectContext deleteObject:toDo];
 //  [self saveToManagedObjectContext:toDoItem];
-   [self.toDoes removeObjectAtIndex:indexPath.row];
+  //
+//  NSMutableArray * mut = [[NSMutableArray alloc] init];
+//  mut[0] = @"some";
+//  mut[1] = @"some2";
+//  [mut removeObjectAtIndex:1];
+   [self.toDoes removeObjectAtIndex: indexPath.row];
+   [self saveDataWithArray:self.toDoes];
 //  [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-  [self.tableView reloadData];
+   [self.tableView reloadData];
 }
 
   -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -95,6 +128,8 @@
       NSIndexPath *indexpath = nil;
       indexpath = [self.tableView indexPathForSelectedRow];
       detailViewController.toDo = self.toDoes[indexpath.row] ;
+      detailViewController.viewList = self;
+      detailViewController.index = indexpath.row;
       
     }
   

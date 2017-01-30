@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ToDo : NSObject
+@interface ToDo : NSObject <NSCoding>
   @property(nonatomic, strong) NSString *name;
   @property(nonatomic) BOOL isDone;
   @property(nonatomic,strong) NSDate *date;
   -(id)initWithName: (NSString*) name;
   -(void)changeStatus;
+  +(void)saveDataWithArray:(NSArray*) array;
+  +(NSMutableArray*)loadData;
 @end

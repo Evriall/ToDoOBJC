@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "ToDo.h"
+#import "ViewController.h"
 
 @interface DetailViewController : UIViewController
+
   @property (weak, nonatomic) IBOutlet UITextView *textView;
-    @property(nonatomic,strong) ToDo *toDo;
+  @property(nonatomic,strong) ToDo *toDo;
+  @property(nonatomic,strong) ViewController *viewList;
+  @property(nonatomic) int index;
+
 @end
