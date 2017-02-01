@@ -12,9 +12,7 @@
 #import "Cell.h"
 
 @interface ViewController ()
-//{
-//  NSMutableArray *toDoes;
-//}
+
 @end
 
 @implementation ViewController
@@ -23,30 +21,14 @@
   NSLog(@"%d", self.toDoes.count);
 }
 - (void)reloadToDoItems {
-  self.toDoes = [self loadData];
+  self.toDoes = [ToDo loadData];
   [self.tableView reloadData];
 }
 
--(NSMutableArray*)loadData{
-  NSData *todoData = [[NSUserDefaults standardUserDefaults] objectForKey:@"todo"];
-  NSMutableArray *toDoes = [[NSKeyedUnarchiver unarchiveObjectWithData:todoData] mutableCopy];
-  return toDoes;
-}
-
--(void)saveDataWithArray:(NSArray*) array{
-  NSData *data = [NSKeyedArchiver archivedDataWithRootObject: array];
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"todo"];
-}
 - (void)viewDidLoad {
   [super viewDidLoad];
-//  ToDo *todo = [[ToDo alloc] initWithName:@"Task"];
-//  ToDo *todo2 = [[ToDo alloc] initWithName:@"ATask2"];
   NSData *todoData = [[NSUserDefaults standardUserDefaults] objectForKey:@"todo"];
   self.toDoes = [[NSKeyedUnarchiver unarchiveObjectWithData:todoData] mutableCopy];
-//  self.toDoes = [@[todo, todo2] mutableCopy];
-//  [toDoes initWithObjects:todo,todo2, nil];
-//  [self.toDoes addObject:todo];
-//  [self.toDoes addObject:todo2];
 }
 
   - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -82,8 +64,7 @@
     int tag = tap.view.tag;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag inSection:0];
     [self.toDoes[indexPath.row] changeStatus];
-    [self saveDataWithArray:self.toDoes];
-//    [self.tableView reloadRowsAtIndexPaths:indexPath withRowAnimation:NO];
+    [ToDo saveDataWithArray:self.toDoes];
     [self.tableView reloadData];
     
   }
@@ -106,17 +87,8 @@
 }
 
 - (void)deleteItemForIndexPath:(NSIndexPath *)indexPath fromTableView:(UITableView *)tableView  {
-//  ToDo *toDo = [toDoes objectAtIndex:indexPath.row];
-//  [self.managedObjectContext deleteObject:toDo];
-//  [self saveToManagedObjectContext:toDoItem];
-  //
-//  NSMutableArray * mut = [[NSMutableArray alloc] init];
-//  mut[0] = @"some";
-//  mut[1] = @"some2";
-//  [mut removeObjectAtIndex:1];
    [self.toDoes removeObjectAtIndex: indexPath.row];
-   [self saveDataWithArray:self.toDoes];
-//  [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+   [ToDo saveDataWithArray:self.toDoes];
    [self.tableView reloadData];
 }
 
@@ -183,14 +155,6 @@
     NSArray *sortDescriptors = [NSArray arrayWithObject:dateDescriptor];
     NSArray *sortedArray = [self.toDoes
                                  sortedArrayUsingDescriptors:sortDescriptors];
-    
-//    NSArray* newArray = [array sortedArrayUsingComparator: ^NSComparisonResult(MyClass *c1, MyClass *c2)
-//    {
-//      NSDate *d1 = c1.date;
-//      NSDate *d2 = c2.date;
-//      
-//      return [d1 compare:d2];
-//    }];
     
     self.toDoes = sortedArray;
     [self.tableView reloadData];
