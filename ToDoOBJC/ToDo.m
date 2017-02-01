@@ -11,7 +11,7 @@
 @implementation ToDo
   -(id)initWithName: (NSString*) name {
     self.name = name;
-    self.isDone = YES;
+    self.isDone = NO;
     self.date = [NSDate date];
     return self;
   }

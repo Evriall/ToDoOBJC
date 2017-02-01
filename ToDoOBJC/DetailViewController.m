@@ -49,7 +49,8 @@
     [mut addObject:toDoItem];
     [self saveDataWithArray:mut];
   }
-//  [self dismissViewControllerAnimated:YES completion:nil];
+  //[self.navigationController dismissViewControllerAnimated:YES completion:nil];
+  [self performSegueWithIdentifier:@"unwindSegue" sender:self];
 }
 -(void)saveDataWithArray:(NSArray*) array{
   NSData *data = [NSKeyedArchiver archivedDataWithRootObject: array];
