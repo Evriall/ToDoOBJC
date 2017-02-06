@@ -12,9 +12,12 @@
 
 @interface DetailViewController : UIViewController
 
+  // textView потрібно занести в інтерфейс m файла тут не потрібно його бачити
   @property (weak, nonatomic) IBOutlet UITextView *textView;
   @property(nonatomic,strong) ToDo *toDo;
-  @property(nonatomic,strong) ViewController *viewList;
-  @property(nonatomic) int index;
+
+// навіщо сюди передавати цілий контролер його тут взагалі не повинно бути так само як і індекса
+//  @property(nonatomic,strong) ViewController *viewList;
+//  @property(nonatomic) int index;
 
 @end
