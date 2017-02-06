@@ -10,6 +10,8 @@
 #import "ToDo.h"
 
 @interface ViewController : UIViewController
+  
+  // чи потрібно бачити два наступних проперті всьому проекту, можливо краще перенести їх в середину m файлу
   @property (weak, nonatomic) IBOutlet UITableView *tableView;
   @property (nonatomic, strong) NSMutableArray *toDoes;
   -(void)tappedCheck;
