@@ -11,11 +11,17 @@
 #import "DetailViewController.h"
 #import "Cell.h"
 
+// приведи код до одного стайлу
+
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+  // в першу чергу краще описувати функції життєвого циклу
+  
+  // reloadToDoItems краще перенести у viewWillAppear
+  //навіщо ця функція prepareForUnwind?
 -(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
   [self reloadToDoItems];
   NSLog(@"%d", self.toDoes.count);
@@ -27,6 +33,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  // це краще винести в сервіс по роботі з даними
   NSData *todoData = [[NSUserDefaults standardUserDefaults] objectForKey:@"todo"];
   self.toDoes = [[NSKeyedUnarchiver unarchiveObjectWithData:todoData] mutableCopy];
 }
@@ -39,6 +46,8 @@
   }
   -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Cell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    
+    // конфігурацію цела я б виніс би або в окрему функцію або вже на саму целу
     int index = [indexPath row];
     ToDo *toDo = self.toDoes[index];
     cell.textLabel.text = toDo.name;
@@ -48,7 +57,7 @@
       cell.image.image = [UIImage imageNamed:@"uncheck"];
     }
     // Add tap recognizer to Image
-    
+    // клік по імейджу я б зробив би на самому целі а через делегати прокидува би реакцію на клі сюди
     UITapGestureRecognizer *tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(tappedCheck:)];
     
     tapGesture1.numberOfTapsRequired = 1;
@@ -60,6 +69,7 @@
     cell.image.tag = indexPath.row;
     return cell;
   }
+// це повинен був би бути метод делегати цела
   -(void)tappedCheck:(UITapGestureRecognizer *)tap{
     int tag = tap.view.tag;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag inSection:0];
@@ -86,6 +96,7 @@
   return @[deleteAction];
 }
 
+// це винести в сервіс по роботі з даними
 - (void)deleteItemForIndexPath:(NSIndexPath *)indexPath fromTableView:(UITableView *)tableView  {
    [self.toDoes removeObjectAtIndex: indexPath.row];
    [ToDo saveDataWithArray:self.toDoes];
@@ -94,9 +105,13 @@
 
   -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([@"AddToDo" isEqualToString:[segue identifier]]) {
+      
+      // логіка з навігейшеном тут взагалі не потрібна
       UINavigationController *navigtionController = [segue destinationViewController];
       DetailViewController *detailViewController = [navigtionController viewControllers][0];
       // Get the cell that generated this segue.
+      
+      // занадто багато всього передається достатньо було б передати саму модель туду
       NSIndexPath *indexpath = nil;
       indexpath = [self.tableView indexPathForSelectedRow];
       detailViewController.toDo = self.toDoes[indexpath.row] ;
