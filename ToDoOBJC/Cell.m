@@ -10,6 +10,7 @@
 
 @implementation Cell
 
+    // обидва методи можна видалити якщо тут нічого не юзається
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
