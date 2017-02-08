@@ -6,6 +6,8 @@
 //  Copyright © 2017 Sergey Guznin. All rights reserved.
 //
 
+// я б в моделі не робив би ніякої лишньої логіки краще винести її в хелпер чи сервіс тут вже залежить від того як
+// ти працюєш із даними
 #import <Foundation/Foundation.h>
 
 @interface ToDo : NSObject <NSCoding>
